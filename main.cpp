@@ -19,11 +19,13 @@ int main()
     while(archE>>idA)
     {   
         getline(archE, nombreA);
+        nombreA.erase(0,1);
         actores[listAct].setId(idA);
         actores [listAct].setNombre(nombreA);
         listAct++;
     }
     archE.close();
+    
         //Asignacion de peliculas, del archivo
     archE.open("peliculas.txt");
     int nump, an, dur, cantA,idAP, listPel=0;
@@ -55,60 +57,120 @@ int main()
             }
         }
         getline(archE, titl);
+        titl.erase(0,1);
         peliculas[listPel].setTitulo(titl);
         if(!ag){ cout<< "en la pelicula: "<<titl<<endl;}
         listPel++;
     }
     archE.close();
+    
         //Asignacion de funciones por el usuario
     string cve;
-    int NoPeli, h,m, sala, listFun=0, opf;
+    int NoPeli, h,m, sala, listFun=0;
     cout<<"Ingrese los datos de las funciones del día"<<endl;
-    do
-    {   int opf=0;
+    a:
+        int opf=0;
         cout<<"Clave: "; cin>>cve;
+        funciones[listFun].setCveFuncion(cve);
+        nopeli:
         cout<<"No. de Pelicula: ";cin>>NoPeli;
+        int noen1=0;
+        for (int numerop=0; numerop<listPel; numerop++)
+        {   
+            if(NoPeli==peliculas[numerop].getNumPeli()) {funciones[listFun].setNumPeli(NoPeli);}
+            else if(NoPeli!=peliculas[numerop].getNumPeli()){noen1++;}
+            if (noen1==listPel){cout<<"No. de Pelicula no existe, ingrese uno valido\n"; goto nopeli;}
+        }
         cout<<"~Horario(formato 24hrs)~"<<endl;
         hr:
         cout<<"Hora: ";cin>>h; if (h<0 || h>23){cout<<"Hora invalida, ingrese de nuevo\n"; goto hr;}
         min:
         cout<<"Minutos: ";cin>>m; if (m<0 || m>59){cout<<"Minuto invalido, ingrese de nuevo\n"; goto min;}
-        cout<<"Sala: ";cin>>sala;
         Hora hf(h, m);
-        funciones[listFun].setCveFuncion(cve);
-        funciones[listFun].setNumPeli(NoPeli);
         funciones[listFun].setHora(hf);
+        cout<<"Sala: ";cin>>sala;
         funciones[listFun].setSala(sala);
         listFun++;
+        otrf:
         cout<<"¿Desea agregar otra función?"<<endl<<"(1)SI (2)NO "; cin>>opf;
-    } while(opf=1);
-                    //validación extra    //if(opf>2){cout<<"Opción Invalida. Ingrese nuevamente"; goto a;}
+    if(opf==1) { goto a;}
+    else if(opf>2){cout<<"Opción Invalida. Ingrese nuevamente\n"; goto otrf;}
     
+    menu:
+    char op=0;
+    cout<<"     ~MENÚ DE OPCIONES~"<<endl;
+    cout<<"A) Mostrar lista de Actores"<<endl;
+    cout<<"B) Mostrar lista de Peliculas"<<endl;
+    cout<<"C) Mostrar funciones del día"<<endl;
+    cout<<"D) Consultar funcion por hora"<<endl;
+    cout<<"E) Consultar funcion por clave"<<endl;
+    cout<<"F) Consultar peliculas de un Actor"<<endl;
+    cout<<"G) Terminar"<<endl;
+    cout<<"Seleccione una opción: ";cin>>op;
     
-
-
-
-
-
-
-    /*char op=0;
-    //MENU AQUI
-
-    if(op=='A'||op=='a')
+    if(op=='A'||op=='a') //Mostrar actores
     {
-
+        cout<<"~Id~"<<"\t"<<"~Nombre del Actor~"<<endl; //Encabezado
+        for (int act=0; act<20; act++)
+        {
+            actores[act].muestra();
+        }
+        goto menu;
     }
     else if(op=='B'||op=='b')
     {
-        
+        cout<<"~Titulo~\t\t\t"<<"~Año~\t"<<"~Duracion~\t"<<"~Genero~\t"<<"~Actores~"<<endl; //Encabezado
+        for (int pel=0; pel<11; pel++)
+        {
+            peliculas[pel].muestra();cout<<endl;
+        }
+        goto menu;
     }
     else if(op=='C'||op=='c')
     {
-        
+        for (int fun=0; fun<listFun; fun++)
+        {
+            funciones[fun].muestra();
+        }
+        goto menu;
     }
     else if(op=='D'||op=='d')
-    {
-        
+    {   horanueva:
+        int hr, min, noen2=0;
+        int encab=0;
+        cout<<"~Ingrese la hora de la funcion a consultar(formato 24hrs)~"<<endl;
+        hr2:
+        cout<<"Hora: ";cin>>hr; if (hr<0 || hr>23){cout<<"Hora invalida, ingrese de nuevo\n"; goto hr2;}
+        min2:
+        cout<<"Minutos: ";cin>>min; if (min<0 || min>59){cout<<"Minuto invalido, ingrese de nuevo\n"; goto min2;}
+        Hora hf(hr, min);
+        for(int j=0; j<listFun; j++)
+        {   int y;
+            if(hf.getHh()==funciones[j].getHora().getHh() && hf.getMm()==funciones[j].getHora().getMm()) //Se encuentra el horario en funciones
+            {
+                if (encab==0) //Mostar encabezado en un inicio
+                {
+                    cout<<"~Funciones con horario "<<hr<<":"<<min<<"~\n";
+                    encab = 1;
+                }
+                for(int k=0; k<listPel; k++) //Mostrar titulo de la funcion
+                {
+                    y = peliculas[k].getNumPeli();
+                    if(funciones[j].getNumPeli()==y)
+                    {
+                        cout<<"La pelicula: "<<peliculas[k].getTitulo();
+                        cout<<"\nSe presenta en la sala: "<<funciones[j].getSala()<<endl;
+                    }
+                }
+            }
+            else if(hf.getHh()!=funciones[j].getHora().getHh() || hf.getMm()!=funciones[j].getHora().getMm())
+            {noen2++;}//Contador de veces que no encuentra
+            if(noen2==listFun)//Si no encuentra el horario en todas la funciones arroja mensaje
+            {
+                cout<<"No hay funciones con horario "<<hr<<":"<<min<<endl; goto horanueva;
+            }
+        }
+        goto menu;
     }
     else if(op=='E'||op=='e')
     {
@@ -119,7 +181,7 @@ int main()
         
     }
     else if(op=='G'||op=='g') {return 0;}
-    else { cout<< "Opción invalida\n";}*/
+    else { cout<< "Opción invalida\n";}
     return 0;
 
 }
