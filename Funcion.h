@@ -40,9 +40,9 @@ Funcion::Funcion(string clav, int num, Hora h, int s)
 }
 void Funcion::muestra()
 {
-  cout<<"Datos de la Funcion"<<endl;
+  cout<<"  ~Datos de la Funcion~"<<endl;
   cout<<"Clave de Funcion: "<<cveFuncion<<endl;
   cout<<"No. de Pelicula: "<<numPeli<<endl;
-  cout<<"Hora: "; hora.muestra();
+  cout<<"Horario: "; hora.muestra();
   cout<<"Sala: "<<sala<<endl;
 }
