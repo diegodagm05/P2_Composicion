@@ -19,6 +19,7 @@ class Pelicula
         int getCantActores() {return cantActores;};
         Actor getListaActores(int i) {return listaActores[i];};
         bool agregarActor(Actor);
+        void muestra();
         
     private:
         int numPeli;
@@ -68,4 +69,12 @@ bool Pelicula::agregarActor(Actor a1)//,int &f)
         }
     }
     else if(cantActores>=10) {cout<<"No se puede agregar actor, la pelicula ya contiene 10 actores\n"; return false;}
+}
+void Pelicula::muestra()
+{
+    cout<<titulo<<"\t"<<anio<<"\t"<<duracion<<"\t"<<genero<<"\t";
+    for (int k=0; k<cantActores; k++)
+    {
+        cout<<"-"<<listaActores[k].getNombre();
+    }
 }
