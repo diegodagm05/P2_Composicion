@@ -191,7 +191,7 @@ int main()
                     {
                         cout<<"Pelicula: "<<peliculas[m].getTitulo()<<endl;
                         cout<<"Horario: "; funciones[l].getHora().muestra();
-                        cout<<"Duracion: "<<peliculas[m].getDuracion()<<endl;
+                        cout<<"Duracion: "<<peliculas[m].getDuracion()<<" minutos"<<endl;
                         cout<<"Genero: "<<peliculas[m].getGenero()<<endl;
                         cout<<"Actores: -";
                         for (int n=0; n<peliculas[m].getCantActores(); n++)//Mostrar los actores de la pelicula
@@ -208,11 +208,33 @@ int main()
         goto menu;
     }
     else if(op=='F'||op=='f')
-    {
-        
+    {   idnuevo:
+        int idc, compid, noen4=0;
+        cout<<"Ingrese id del Actor: "; cin>>idc;
+        for(int n=0; n<listAct; n++)
+        {
+            compid = actores[n].getId();
+            if(idc==compid)//Verificar que el id exista en mi lista actores
+            {
+                cout<<"~Pelicula(s) en la(s) que participa "<<actores[n].getNombre()<<"~"<<endl;
+                for (int o=0; o<listPel; o++)//ciclo para buscar todas las peliculas con ese id
+                {
+                    int numact = peliculas[o].getCantActores();
+                    for(int p=0; p<numact; p++)
+                    {
+                        if(peliculas[o].getListaActores(p).getId()==idc)
+                        {
+                            cout<<peliculas[o].getTitulo();
+                            cout<<" "<<peliculas[o].getAnio()<<endl;
+                        }
+                    }
+                }
+            }
+            else if(idc!=compid) {noen4++;} //Contador de no encontrar
+            if(noen4==listAct) {cout<<"No existe actor con id "<<idc<<". Ingrese de nuevo"<<endl; goto idnuevo;} //No existe el actor con id brindado
+        }
+        goto menu;
     }
     else if(op=='G'||op=='g') {return 0;}
     else { cout<< "Opción invalida\n";}
-    return 0;
-
 }
