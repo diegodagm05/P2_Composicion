@@ -67,7 +67,7 @@ int main()
         //Asignacion de funciones por el usuario
     string cve;
     int NoPeli, h,m, sala, listFun=0;
-    cout<<"Ingrese los datos de las funciones del día"<<endl;
+    cout<<"~Ingrese los datos de las funciones del día~"<<endl;
     a:
         int opf=0;
         cout<<"Clave: "; cin>>cve;
@@ -120,7 +120,7 @@ int main()
     else if(op=='B'||op=='b')
     {
         cout<<"~Titulo~\t\t\t"<<"~Año~\t"<<"~Duracion~\t"<<"~Genero~\t"<<"~Actores~"<<endl; //Encabezado
-        for (int pel=0; pel<11; pel++)
+        for (int pel=0; pel<listPel; pel++)
         {
             peliculas[pel].muestra();cout<<endl;
         }
@@ -145,7 +145,7 @@ int main()
         cout<<"Minutos: ";cin>>min; if (min<0 || min>59){cout<<"Minuto invalido, ingrese de nuevo\n"; goto min2;}
         Hora hf(hr, min);
         for(int j=0; j<listFun; j++)
-        {   int y;
+        {   
             if(hf.getHh()==funciones[j].getHora().getHh() && hf.getMm()==funciones[j].getHora().getMm()) //Se encuentra el horario en funciones
             {
                 if (encab==0) //Mostar encabezado en un inicio
@@ -154,7 +154,7 @@ int main()
                     encab = 1;
                 }
                 for(int k=0; k<listPel; k++) //Mostrar titulo de la funcion
-                {
+                {   int y;
                     y = peliculas[k].getNumPeli();
                     if(funciones[j].getNumPeli()==y)
                     {
@@ -173,8 +173,39 @@ int main()
         goto menu;
     }
     else if(op=='E'||op=='e')
-    {
-        
+    {   clavenueva:
+        string cfi;
+        int noen3=0, encab1=0;
+        cout<<"Ingrese la clave de la funcion a consultar: "; cin>>cfi;
+        for (int l=0; l<listFun; l++)
+        {   string z;
+            z = funciones[l].getCveFuncion();
+            if(cfi == z)
+            {
+                cout<<"~Funcion con clave "<<cfi<<"~"<<endl;
+                cout<<"Sala: "<<funciones[l].getSala()<<endl;
+                for(int m=0; m<listPel; m++)
+                {   int w;
+                    w = peliculas[m].getNumPeli();
+                    if(funciones[l].getNumPeli()==w)
+                    {
+                        cout<<"Pelicula: "<<peliculas[m].getTitulo()<<endl;
+                        cout<<"Horario: "; funciones[l].getHora().muestra();
+                        cout<<"Duracion: "<<peliculas[m].getDuracion()<<endl;
+                        cout<<"Genero: "<<peliculas[m].getGenero()<<endl;
+                        cout<<"Actores: -";
+                        for (int n=0; n<peliculas[m].getCantActores(); n++)//Mostrar los actores de la pelicula
+                        {
+                            cout<<peliculas[m].getListaActores(n).getNombre()<<"-";
+                        }
+                    }
+                }
+                cout<<endl;
+            }
+            else if(cfi !=z) {noen3++;} //Contador cuando no encuentra 
+            if(noen3==listFun) {cout<<"No hay funciones con la clave "<<cfi<<". Ingrese de nuevo"<<endl; goto clavenueva; } //No existe en niguna funcion
+        }
+        goto menu;
     }
     else if(op=='F'||op=='f')
     {
