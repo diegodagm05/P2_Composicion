@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <iomanip>
 #include "Pelicula.h"
 #include "Funcion.h"
 using namespace std;
@@ -14,7 +15,7 @@ int main()
         //Asignacion de actores, del archivo
     ifstream archE;
     archE.open("actores.txt");
-    int idA, listAct=0;
+    int idA, listAct=0, tamt=0, tamg=0;
     string nombreA;
     while(archE>>idA)
     {   
@@ -37,6 +38,7 @@ int main()
         peliculas[listPel].setAnio(an);
         peliculas[listPel].setDuracion(dur);
         peliculas[listPel].setGenero(gen);
+        if(tamg<gen.length()) { tamg = gen.length();}
         for (int i=0; i<cantA; i++)
         {   int noen=0;
             archE>>idAP;
@@ -59,6 +61,7 @@ int main()
         getline(archE, titl);
         titl.erase(0,1);
         peliculas[listPel].setTitulo(titl);
+        if(tamt<titl.length()) { tamt = titl.length();}
         if(!ag){ cout<< "en la pelicula: "<<titl<<endl;}
         listPel++;
     }
@@ -118,11 +121,19 @@ int main()
         goto menu;
     }
     else if(op=='B'||op=='b')
-    {
-        cout<<"~Titulo~\t\t\t"<<"~Año~\t"<<"~Duracion~\t"<<"~Genero~\t"<<"~Actores~"<<endl; //Encabezado
+    {   
+        cout<<"~TITULO~"<<setw(tamt+1)<<"~AÑO~"<<setw(13)<<"~DURACION~"<<setw(11)<<"~GENERO~"<<setw(tamg+3)<<"~ACTORES~"<<endl; //Encabezado
         for (int pel=0; pel<listPel; pel++)
-        {
-            peliculas[pel].muestra();cout<<endl;
+        {   string tit = peliculas[pel].getTitulo();
+            string gnro = peliculas[pel].getGenero();
+            cout<<peliculas[pel].getTitulo()<<setw(((tamt-tit.length())+7));
+            cout<<peliculas[pel].getAnio()<<"    "<<peliculas[pel].getDuracion(); if(peliculas[pel].getDuracion()<100){cout<<' ';}cout<<" min";
+            cout<<" \t  "<<peliculas[pel].getGenero()<<setw((tamg-gnro.length()+3));
+            for (int p=0; p<peliculas[pel].getCantActores(); p++)
+            {
+                cout<<"/"<<peliculas[pel].getListaActores(p).getNombre();
+            }
+            cout<<endl;
         }
         goto menu;
     }
@@ -233,6 +244,8 @@ int main()
             else if(idc!=compid) {noen4++;} //Contador de no encontrar
             if(noen4==listAct) {cout<<"No existe actor con id "<<idc<<". Ingrese de nuevo"<<endl; goto idnuevo;} //No existe el actor con id brindado
         }
+        
+        
         goto menu;
     }
     else if(op=='G'||op=='g') {return 0;}
