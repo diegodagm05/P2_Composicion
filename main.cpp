@@ -42,16 +42,16 @@ int main()
         for (int i=0; i<cantA; i++)
         {   int noen=0;
             archE>>idAP;
-            for(listAct=0; listAct<20; listAct++) //Este ciclo verifica que el id del archivo exista
+            for(int q=0; q<listAct; q++) //Este ciclo verifica que el id del archivo exista
             {
-                int x = actores[listAct].getId(); //Almacenar id de lista actores en variable x
+                int x = actores[q].getId(); //Almacenar id de lista actores en variable x
                 if(idAP == x)//comparar x con id de actor lista peliculas
                 {   
-                    ag = peliculas[listPel].agregarActor(actores[listAct]);//<<endl; //Agregar el objeto actor a la pelicula solo cuando se encuentre
+                    ag = peliculas[listPel].agregarActor(actores[q]);//<<endl; //Agregar el objeto actor a la pelicula solo cuando se encuentre
                 }
                 else if (idAP!=x)//Contador de veces que no coincide id
                 {   noen++;
-                    if(noen==20) //Mensaje de error cuando no coincide en toda la lista
+                    if(noen==listAct) //Mensaje de error cuando no coincide en toda la lista
                     {
                         cout<<"El actor con id "<<idAP<<" no existe en la lista actores. Correjir en archivo\n";
                     }
@@ -114,24 +114,24 @@ int main()
     if(op=='A'||op=='a') //Mostrar actores
     {
         cout<<"~Id~"<<"\t"<<"~Nombre del Actor~"<<endl; //Encabezado
-        for (int act=0; act<20; act++)
+        for (int act=0; act<listAct; act++)
         {
             actores[act].muestra();
         }
         goto menu;
     }
-    else if(op=='B'||op=='b')
+    else if(op=='B'||op=='b') //Mostrar datos en forma alineada
     {   
         cout<<"~TITULO~"<<setw(tamt+1)<<"~AÑO~"<<setw(13)<<"~DURACION~"<<setw(11)<<"~GENERO~"<<setw(tamg+3)<<"~ACTORES~"<<endl; //Encabezado
         for (int pel=0; pel<listPel; pel++)
-        {   string tit = peliculas[pel].getTitulo();
-            string gnro = peliculas[pel].getGenero();
+        {   string tit = peliculas[pel].getTitulo(); //Almacenar en cada ciclo el titulo, para obtener su longitud
+            string gnro = peliculas[pel].getGenero(); //Lo mismo para el genero
             cout<<peliculas[pel].getTitulo()<<setw(((tamt-tit.length())+7));
             cout<<peliculas[pel].getAnio()<<"    "<<peliculas[pel].getDuracion(); if(peliculas[pel].getDuracion()<100){cout<<' ';}cout<<" min";
-            cout<<" \t  "<<peliculas[pel].getGenero()<<setw((tamg-gnro.length()+3));
+            cout<<"      "<<peliculas[pel].getGenero()<<setw((tamg-gnro.length()+3));
             for (int p=0; p<peliculas[pel].getCantActores(); p++)
             {
-                cout<<"/"<<peliculas[pel].getListaActores(p).getNombre();
+                cout<<"/"<<peliculas[pel].getListaActores(p).getNombre()<<" "<<peliculas[pel].getListaActores(p).getId();
             }
             cout<<endl;
         }
@@ -146,7 +146,7 @@ int main()
         goto menu;
     }
     else if(op=='D'||op=='d')
-    {   horanueva:
+    {   
         int hr, min, noen2=0;
         int encab=0;
         cout<<"~Ingrese la hora de la funcion a consultar(formato 24hrs)~"<<endl;
@@ -178,13 +178,13 @@ int main()
             {noen2++;}//Contador de veces que no encuentra
             if(noen2==listFun)//Si no encuentra el horario en todas la funciones arroja mensaje
             {
-                cout<<"No hay funciones con horario "<<hr<<":"<<min<<endl; goto horanueva;
+                cout<<"No hay funciones con horario "<<hr<<":"<<min<<endl; goto menu;
             }
         }
         goto menu;
     }
     else if(op=='E'||op=='e')
-    {   clavenueva:
+    {   
         string cfi;
         int noen3=0, encab1=0;
         cout<<"Ingrese la clave de la funcion a consultar: "; cin>>cfi;
@@ -207,19 +207,20 @@ int main()
                         cout<<"Actores: -";
                         for (int n=0; n<peliculas[m].getCantActores(); n++)//Mostrar los actores de la pelicula
                         {
-                            cout<<peliculas[m].getListaActores(n).getNombre()<<"-";
+                            cout<<peliculas[m].getListaActores(n).getNombre();
+                            cout<<peliculas[m].getListaActores(n).getId() <<"-";
                         }
                     }
                 }
                 cout<<endl;
             }
             else if(cfi !=z) {noen3++;} //Contador cuando no encuentra 
-            if(noen3==listFun) {cout<<"No hay funciones con la clave "<<cfi<<". Ingrese de nuevo"<<endl; goto clavenueva; } //No existe en niguna funcion
+            if(noen3==listFun) {cout<<"No hay funciones con la clave "<<cfi<<". Ingrese de nuevo"<<endl; goto menu; } //No existe en niguna funcion
         }
         goto menu;
     }
     else if(op=='F'||op=='f')
-    {   idnuevo:
+    {   
         int idc, compid, noen4=0;
         cout<<"Ingrese id del Actor: "; cin>>idc;
         for(int n=0; n<listAct; n++)
@@ -242,12 +243,12 @@ int main()
                 }
             }
             else if(idc!=compid) {noen4++;} //Contador de no encontrar
-            if(noen4==listAct) {cout<<"No existe actor con id "<<idc<<". Ingrese de nuevo"<<endl; goto idnuevo;} //No existe el actor con id brindado
+            if(noen4==listAct) {cout<<"No existe actor con id "<<idc<<". Ingrese de nuevo"<<endl; goto menu;} //No existe el actor con id brindado
         }
         
         
         goto menu;
     }
     else if(op=='G'||op=='g') {return 0;}
-    else { cout<< "Opción invalida\n";}
+    else { cout<< "Opción invalida\n"; goto menu;}
 }
