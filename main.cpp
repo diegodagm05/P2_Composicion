@@ -207,7 +207,7 @@ int main()
                         cout<<"Actores: -";
                         for (int n=0; n<peliculas[m].getCantActores(); n++)//Mostrar los actores de la pelicula
                         {
-                            cout<<peliculas[m].getListaActores(n).getNombre();
+                            cout<<peliculas[m].getListaActores(n).getNombre()<<" ";
                             cout<<peliculas[m].getListaActores(n).getId() <<"-";
                         }
                     }
